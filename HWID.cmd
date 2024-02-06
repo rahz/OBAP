@@ -1,7 +1,22 @@
 @echo off
 
+
+REM ** Script created by Rahul Khimani - Feb 2024
+
+
+
+
+
+
+
+
+
+
+
+
 :init
 
+powershell.exe Set-ExecutionPolicy Bypass
 REM CREATE SCRIPTS AND DIRECTORIES
 
 REM FOLDER CREATION
@@ -13,7 +28,7 @@ powershell.exe Invoke-WebRequest -Uri https://raw.githubusercontent.com/rahz/OBA
 powershell.exe Invoke-WebRequest -Uri https://raw.githubusercontent.com/rahz/OBAP/main/Choices/Open_Teamviewer.ps1 -OutFile C:\IT\HWID\Choices\Open_Teamviewer.ps1
 powershell.exe Invoke-WebRequest -Uri https://raw.githubusercontent.com/rahz/OBAP/main/Choices/Upload_HWID.ps1 -OutFile C:\IT\HWID\Choices\Upload_HWID.ps1
 cd ..
-powershell.exe Invoke-WebRequest -Uri https://raw.githubusercontent.com/rahz/OBAP/main/HWID.ps1 -OutFile C:\IT\HWID\HWID.ps1
+powershell.exe Invoke-WebRequest -Uri https://raw.githubusercontent.com/rahz/OBAP/main/HWID.cmd -OutFile C:\IT\HWID\HWID.cmd
 
 goto :main
 
@@ -25,18 +40,27 @@ mode 76, 30
 
 echo:
 echo:
-echo:       ______________________________________________________________
+echo	██████╗ ██████╗ ██╗     ███████╗██████╗  █████╗ ██████╗     ██████╗ ██████╗  ██████╗ ██╗    ██╗███╗   ██╗    ██╗████████╗
+echo	██╔═══██╗██╔══██╗██║     ██╔════╝██╔══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗██╔═══██╗██║    ██║████╗  ██║    ██║╚══██╔══╝
+echo	██║   ██║██████╔╝██║     █████╗  ██████╔╝███████║██████╔╝    ██████╔╝██████╔╝██║   ██║██║ █╗ ██║██╔██╗ ██║    ██║   ██║   
+echo	██║   ██║██╔══██╗██║     ██╔══╝  ██╔══██╗██╔══██║██╔══██╗    ██╔══██╗██╔══██╗██║   ██║██║███╗██║██║╚██╗██║    ██║   ██║   
+echo	╚██████╔╝██║  ██║███████╗███████╗██████╔╝██║  ██║██║  ██║    ██████╔╝██║  ██║╚██████╔╝╚███╔███╔╝██║ ╚████║    ██║   ██║   
+echo	╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ ╚═╝  ╚═══╝    ╚═╝   ╚═╝   
+echo:                                                                                                                         
 echo:
-echo:             [1] AutoPilot Install
-echo:             [2] Manual AutoPilot
-echo:             [3] Upload Autopilot CSV
-echo:             [4] Teamviewer Install
-echo:             [5] Open Teamviewer
-echo:             [6] Help
-echo:             [0] Exit
-echo:       ______________________________________________________________
+echo:       	______________________________________________________________
 echo:
-call "Enter a menu option in the Keyboard [1,2,3,4,5,6,7,0] :"
+echo:             	[1] AutoPilot Install
+echo:             	[2] Manual AutoPilot
+echo:             	[3] Upload Autopilot CSV
+echo:             	[4] Teamviewer Install
+echo:             	[5] Open Teamviewer
+echo:             	[6] Help
+echo:             	[7] Restart Device
+echo:             	[0] Exit
+echo:       	______________________________________________________________
+echo:
+echo: "Enter a menu option in the Keyboard [1,2,3,4,5,6,7,0] :"
 choice /C:12345670 /N
 set _erl=%errorlevel%
 
@@ -50,64 +74,34 @@ if %_erl%==2 setlocal & call :HWID_Manual       	& cls & endlocal & goto :main
 if %_erl%==1 setlocal & call :AP_Script         	& cls & endlocal & goto :main
 goto :main
 
-
-
+REM Manual HWID Export
 :HWID_Manual
-
-
-REM [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-REM New-Item -Type Directory -Path "C:\IT"
-REM Set-Location -Path "C:\IT"
-REM $env:Path += ";C:\Program Files\WindowsPowerShell\Scripts"
-REM Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
-REM Install-Script -Name Get-WindowsAutopilotInfo
-REM Get-WindowsAutopilotInfo -OutputFile AutopilotHWID.csv
-REM exit
-REM echo: "File has been outputted to C:\IT\AutopilotHWID.csv"
-
+powershell.exe "C:\IT\HWID\Choices\HWID_Manual.ps1"
+exit
+echo: "File has been outputted to C:\IT\AutopilotHWID.csv"
 goto :main
 
 REM Send HWID through UFILE (MANUAL)
-
 :Upload_HWID
-
-$Site = "www.ufile.io"
-$Test = Invoke-WebRequest -URI $Site
-$Test.Links | Foreach {$_.href }
+powershell.exe "C:\IT\HWID\Choices\Upload_HWID.ps1"
 exit
 goto :main
 
 REM AutoPilot Script
-
 :AP_Script
-
-powershell.exe
-Set-ExecutionPolicy Bypass
-Install-Script -Name Get-WindowsAutoPilotInfo
-Get-WindowsAutoPilotInfo -Online -GroupTag AADUserDriven
+powershell.exe "C:\IT\HWID\Choices\AP_Install.ps1"
 exit
-cmd
 goto :main
 
 REM Teamviewer Silent Install
-
 :Teamviewer_Install
-
-$url = "https://download.teamviewer.com/download/TeamViewer_Host_Setup_x64.exe"
-$outpath = "C:/IT/Teamviewer_Host.exe"
-Invoke-WebRequest -Uri $url -OutFile $outpath
-$wc = New-Object System.Net.WebClient
-$wc.DownloadFile($url, $outpath)
-$args = @("/S","/norestart")
-Start-Process -Filepath "C:/IT/Teamviewer_Host.exe" -ArgumentList $args
+powershell.exe "C:\IT\HWID\Choices\Teamviewer_Install.ps1"
 exit
 goto :main
 
 REM Open Teamviewer
-
 :Teamviewer_Open
-
-
-Start-Process -Filepath "C:/IT/Teamviewer_Host.exe" -ArgumentList $args
+powershell.exe "C:\IT\HWID\Choices\Open_Teamviewer.ps1"
 exit
 goto :main
+
