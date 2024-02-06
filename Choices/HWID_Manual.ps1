@@ -5,7 +5,5 @@ $env:Path += ";C:\Program Files\WindowsPowerShell\Scripts"
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
 Install-Script -Name Get-WindowsAutopilotInfo
 Get-WindowsAutopilotInfo -OutputFile AutopilotHWID.csv
-exit
-echo: "File has been outputted to C:\IT\AutopilotHWID.csv"
 
-goto :main
+
