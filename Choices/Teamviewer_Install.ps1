@@ -1,4 +1,4 @@
-$url = "https://download.teamviewer.com/download/TeamViewer_Host_Setup_x64.exe"
+$url = "https://get.teamviewer.com/6fdg592"
 $outpath = "C:/IT/Teamviewer_Host.exe"
 Invoke-WebRequest -Uri $url -OutFile $outpath
 $wc = New-Object System.Net.WebClient
